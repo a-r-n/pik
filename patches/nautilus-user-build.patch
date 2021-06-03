@@ -1,0 +1,51 @@
+From 4c77c098a9a1e8446db90c5e6ae112b83856be0f Mon Sep 17 00:00:00 2001
+From: Aaron Nelson <arn@arn.xyz>
+Date: Thu, 3 Jun 2021 12:40:46 -0500
+Subject: [PATCH] buadsasd
+
+---
+ user/framework/Makefile | 2 +-
+ user/framework/nld      | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/user/framework/Makefile b/user/framework/Makefile
+index 1aa1612..e9c8275 100755
+--- a/user/framework/Makefile
++++ b/user/framework/Makefile
+@@ -20,7 +20,7 @@ BLOB_KOBJ = blob.kobj.o
+ 
+ //CC = gcc
+ 
+-CC = wllvm
++CC = clang
+ ME = opt
+ FINALCC = clang
+ LD = ld
+diff --git a/user/framework/nld b/user/framework/nld
+index 44497c3..7d16c91 100755
+--- a/user/framework/nld
++++ b/user/framework/nld
+@@ -11,8 +11,9 @@ fi
+ REALPATH=$(realpath $0)
+ DIRNAME=$(dirname $REALPATH)
+ 
+-CRTGEN_DIR=/usr/lib64
+-CRTBE_DIR=/usr/lib/gcc/x86_64-redhat-linux/8
++# These find the paths to crti.o and crtendS.o, which are machine-specific
++CRTGEN_DIR=$(gcc -static-pie -v -Wl,-v,--verbose 2>&1 >/dev/null | grep -oP '([^ ]*?)\/crti\.o' | head -n 1 |  sed 's/\/crti.o//')
++CRTBE_DIR=$(gcc -static-pie -v -Wl,-v,--verbose 2>&1 >/dev/null | grep -oP '([^ ]*?)\/crtendS\.o' | head -n 1 |  sed 's/\/crtendS.o//')
+ 
+ OUT_FLAG=$(echo "$*" | grep -Poe "-o\ .*?(\ |$)")
+ echo $OUT_FLAG
+@@ -56,7 +57,7 @@ fi
+ ld -static -pie --no-dynamic-linker \
+   -T $DIRNAME/framework.lds -dp -z max-page-size=0x1000 -z relro -z now \
+   $CRTGEN_DIR/rcrt1.o $CRTGEN_DIR/crti.o $CRTBE_DIR/crtbeginS.o \
+-  -L/home/arn9233/ -L$CRTBE_DIR/ -L$CRTGEN_DIR -L/usr/lib \
++  -L../../ -L../ -L$CRTBE_DIR/ -L$CRTGEN_DIR -L/usr/lib \
+   target.o $DIRNAME/framework_low_level.o \
+   -lm -lomp -ldl --start-group -lgcc -lpthread -lc -lrt --end-group \
+   $CRTBE_DIR/crtendS.o $CRTGEN_DIR/crtn.o \
+-- 
+2.27.0
+

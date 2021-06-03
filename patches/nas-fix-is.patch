@@ -1,0 +1,42 @@
+From 7e0919813b10baa7a5b27af76dd650d8951a0c79 Mon Sep 17 00:00:00 2001
+From: Aaron Nelson <arn@arn.xyz>
+Date: Thu, 3 Jun 2021 10:04:45 -0500
+Subject: [PATCH] Fix IS
+
+---
+ IS/is.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/IS/is.c b/IS/is.c
+index b209a56..ac65c90 100644
+--- a/IS/is.c
++++ b/IS/is.c
+@@ -137,6 +137,8 @@ INT_TYPE *key_buff_ptr_global;         /* used by full_verify to get */
+ int      passed_verification;
+                                  
+ 
++extern double timer_read(int);
++
+ /************************************/
+ /* These are the three main arrays. */
+ /* See SIZE_OF_BUFFERS def above    */
+@@ -374,7 +376,7 @@ void rank( int iteration )
+     INT_TYPE    key;
+     INT_TYPE    min_key_val, max_key_val;
+ 
+-    INT_TYPE	prv_buff1[MAX_KEY];
++    INT_TYPE*	prv_buff1 = malloc(sizeof(INT_TYPE) * MAX_KEY);
+ 
+ #pragma omp master
+   {
+@@ -573,6 +575,7 @@ void rank( int iteration )
+         key_buff_ptr_global = key_buff1;
+ 
+   } /* end master */
++  free(prv_buff1);
+ }      
+ 
+ 
+-- 
+2.27.0
+

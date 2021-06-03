@@ -1,0 +1,39 @@
+From 09ffd36f665ef19c2fb31f36c2824984c1171a37 Mon Sep 17 00:00:00 2001
+From: Aaron Nelson <arn@arn.xyz>
+Date: Thu, 3 Jun 2021 11:56:24 -0500
+Subject: [PATCH] fixes for PIK
+
+---
+ openmp/runtime/src/kmp_os.h        | 2 +-
+ openmp/runtime/src/kmp_runtime.cpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/openmp/runtime/src/kmp_os.h b/openmp/runtime/src/kmp_os.h
+index c4c7bcf6cc57..f72b028a2e9f 100644
+--- a/openmp/runtime/src/kmp_os.h
++++ b/openmp/runtime/src/kmp_os.h
+@@ -70,7 +70,7 @@
+ #endif
+ 
+ #if (KMP_OS_LINUX || KMP_OS_WINDOWS) && !KMP_OS_CNK
+-#define KMP_AFFINITY_SUPPORTED 1
++#define KMP_AFFINITY_SUPPORTED 0 // Disabled to test affinity-related issues -ARN (Northwestern)
+ #if KMP_OS_WINDOWS && KMP_ARCH_X86_64
+ #define KMP_GROUP_AFFINITY 1
+ #else
+diff --git a/openmp/runtime/src/kmp_runtime.cpp b/openmp/runtime/src/kmp_runtime.cpp
+index 7f6c149c792e..7a1031bace7e 100644
+--- a/openmp/runtime/src/kmp_runtime.cpp
++++ b/openmp/runtime/src/kmp_runtime.cpp
+@@ -6595,7 +6595,7 @@ static void __kmp_do_serial_initialize(void) {
+   if (__kmp_str_match_true(val)) {
+     kmp_str_buf_t buffer;
+     __kmp_str_buf_init(&buffer);
+-    __kmp_i18n_dump_catalog(&buffer);
++    //__kmp_i18n_dump_catalog(&buffer); // disabled due to link error -ARN (Northwestern)
+     __kmp_printf("%s", buffer.str);
+     __kmp_str_buf_free(&buffer);
+   }
+-- 
+2.27.0
+
