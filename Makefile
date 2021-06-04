@@ -19,5 +19,8 @@ nas: libomp download
 libomp: download
 	scripts/build_libomp.sh
 
+nautilus:
+	scripts/build_nautilus.sh
+
 purge:
-	rm -rf benchmarks/ binaries/
+	rm -rf benchmarks/ binaries/ serial1.out serial2.out debug.out

@@ -8,7 +8,7 @@ make clean; make
 
 mkdir -p ${REPO_ROOT}/binaries/linux
 
-ls | grep arraybench | grep -v "\.c" | grep -v "\.h" | grep -v "\.o" | xargs -I mv % ${REPO_ROOT}/binaries/linux
+ls | grep arraybench | grep -v "\.c" | grep -v "\.h" | grep -v "\.o" | xargs -I% mv % ${REPO_ROOT}/binaries/linux
 cp *bench ${REPO_ROOT}/binaries/linux
 
 # Build for Nautilus
