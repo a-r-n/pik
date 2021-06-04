@@ -19,7 +19,5 @@ nas: libomp download
 libomp: download
 	scripts/build_libomp.sh
 
-clean:
-
 purge:
 	rm -rf benchmarks/ binaries/
